@@ -70,7 +70,6 @@ ORDER BY OWNER_ID ASC;
 2.SELECT * FROM PET,OWNER
  WHERE PET.OWNER_ID = OWNER.OWNER_ID;
 
-
 3.
 SELECT VET_ID,
 V_FNAME,
@@ -78,6 +77,11 @@ V_LNAME,
 SALARY_PER_MON FROM VET 
 WHERE SALARY_PER_MON>8000;
 
+4.SELECT * FROM OWNER
+WHERE owner_id IN (SELECT UNIQUE(p.owner_id)
+FROM pet p, (SELECT owner_id, COUNT(pet_id) AS cn FROM pet GROUP BY owner_id) s WHERE p.owner_id = s.owner_id AND s.cn > 1);
+
+ 
 5.SELECT * FROM Appointment A, 
 PET P, OWNER O 
 WHERE A.OWNER_ID = O.OWNER_ID 
@@ -88,7 +92,6 @@ SELECT * FROM Appointment A, PET P, OWNER O
 WHERE A.OWNER_ID = O.OWNER_ID 
 AND A.PET_ID = P.PET_ID  
 AND A.PET_ID = P.PET_ID;
-
 
 6.UPDATE Appointment SET "Date" = to_date('25/07/22', 'dd/mm/yy') 
 WHERE APPOINTMENT_ID = (SELECT APPOINTMENT_ID FROM Appointment A, PET P WHERE A.PET_ID = P.PET_ID AND P.PET_NAME = 'Putih');
@@ -101,5 +104,4 @@ AND P.OWNER_ID = O.OWNER_ID;
 
 8.UPDATE Pet_Condition SET PET_CONDITION = 'Good' 
 WHERE pet_id = (select pc.pet_id from pet p,pet_condition pc where p.pet_id = pc.pet_id and p.pet_name ='Luna' );
-
 
